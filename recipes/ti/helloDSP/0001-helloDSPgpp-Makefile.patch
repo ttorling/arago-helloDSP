@@ -1,0 +1,76 @@
+Index: helloDSPgpp/Makefile
+===================================================================
+--- a/helloDSPgpp/Makefile	2010-11-10 08:09:09.184630483 -0800
++++ b/helloDSPgpp/Makefile	2010-11-10 08:12:32.875529660 -0800
+@@ -5,7 +5,7 @@
+ #
+ #  @desc   Makefile for helloDSPgpp (Debug and Release versions)
+ #
+-#  @ver    1.10
++#  @ver    1.10p1
+ #   ----------------------------------------------------------------------------
+ #  Copyright (c) Texas Instruments Incorporated 2002-2009
+ #
+@@ -18,22 +18,25 @@
+ #   Base for toolchain
+ #   This may change depending if you are using Montavista or Codesourcery
+ #   ----------------------------------------------------------------------------
+-BASE_TOOLCHAIN := /opt/mv_pro_5.0/montavista/pro/devkit/arm/v5t_le
++#BASE_TOOLCHAIN := /opt/mv_pro_5.0/montavista/pro/devkit/arm/v5t_le
+ #BASE_TOOLCHAIN := /opt/arm/arm-2007q3       # Codesourcery tools
++BASE_TOOLCHAIN := ${CSTOOLS_DIR}
+ 
+ #   ----------------------------------------------------------------------------
+ #   Name of the Linux compiler
+ #   This may change depending if you are using Montavista or Codesourcery
+ #   ----------------------------------------------------------------------------
+-CC := arm_v5t_le-gcc
++#CC := arm_v5t_le-gcc
+ #CC := arm-none-linux-gnueabi-gcc
++CC := ${TARGET_PREFIX}-gcc
+ 
+ #   ----------------------------------------------------------------------------
+ #   Base for DSPLink
+ #   This may have to be changed depending on
+ #   your installation and DSPLink version
+ #   ----------------------------------------------------------------------------
+-DSPLINK := /home/user/OMAPL137_arm_1_00_00_10/dsplink-1_61_03-prebuilt/packages/dsplink
++#DSPLINK := /home/user/OMAPL137_arm_1_00_00_10/dsplink-1_61_03-prebuilt/packages/dsplink
++DSPLINK := ${LINK_INSTALL_DIR}/dsplink
+ 
+ #   ----------------------------------------------------------------------------
+ #   General options, sources and libraries
+@@ -51,10 +54,10 @@
+ #   ----------------------------------------------------------------------------
+ OBJDIR_D := Debug
+ BINDIR_D := $(OBJDIR_D)
+-LIBS_D := $(DSPLINK)/gpp/export/BIN/Linux/OMAPL1XX/DEBUG/dsplink.lib $(LIBS)
++#LIBS_D := $(DSPLINK)/gpp/export/BIN/Linux/OMAPL1XX/DEBUG/dsplink.lib $(LIBS)
+ # If the DSP/Link was rebuilt by the user, replace the line above 
+ # with the one below to use the updated libraries
+-#LIBS_D := $(DSPLINK)/gpp/BUILD/EXPORT/DEBUG/dsplink.lib $(LIBS)
++LIBS_D := $(DSPLINK)/gpp/BUILD/EXPORT/DEBUG/dsplink.lib $(LIBS)
+ OBJS_D := $(SRCS:%.c=$(OBJDIR_D)/%.o)
+ ALL_DEBUG := -g -DDDSP_DEBUG $(DEBUG) -D__DEBUG
+ 
+@@ -63,10 +66,10 @@
+ #   ----------------------------------------------------------------------------
+ OBJDIR_R := Release
+ BINDIR_R := $(OBJDIR_R)
+-LIBS_R := $(DSPLINK)/gpp/export/BIN/Linux/OMAPL1XX/RELEASE/dsplink.lib $(LIBS)
++#LIBS_R := $(DSPLINK)/gpp/export/BIN/Linux/OMAPL1XX/RELEASE/dsplink.lib $(LIBS)
+ # If the DSP/Link was rebuilt by the user, replace the line above 
+ # with the one below to use the updated libraries
+-#LIBS_R := $(DSPLINK)/gpp/BUILD/EXPORT/RELEASE/dsplink.lib $(LIBS)
++LIBS_R := $(DSPLINK)/gpp/BUILD/EXPORT/RELEASE/dsplink.lib $(LIBS)
+ OBJS_R := $(SRCS:%.c=$(OBJDIR_R)/%.o)
+ 
+ #   ----------------------------------------------------------------------------
+@@ -75,7 +78,6 @@
+ INCLUDES := -I$(DSPLINK)/gpp/inc                   \
+             -I$(DSPLINK)/gpp/inc/usr               \
+             -I$(DSPLINK)/gpp/inc/sys/Linux         \
+-            -I$(DSPLINK)/gpp/inc/sys/Linux/2.6.18  \
+             -I$(BASE_TOOLCHAIN)/target/usr/include \
+             -I./
+ 
