@@ -1,0 +1,72 @@
+===============================================================================
+Arago recipe for the HelloDSP example application:
+http://processors.wiki.ti.com/index.php/Example_application_using_DSP_Link_on_OMAPL1x
+
+Also includes an arago recipe for Spectrum Digital BSL:
+http://support.spectrumdigital.com/boards/evmomapl137/revd/
+
+Note: No need for modules_1_10.tgz, since dsplinkk.ko is loaded
+      by ti-dsplink recipe
+
+TODO: Add support for da850-ompal137-evm
+TODO: Add call_dsplib example:
+http://processors.wiki.ti.com/index.php/Example_DSPLIB/DSPLink_Application_on_OMAP-L1x
+TODO: Add support for other SD board revisions. Only includes Rev D.
+TODO: Integration with arago-dvsdk
+http://arago-project.org/git/people/?p=brijesh/arago-dvsdk.git;a=summary
+
+==============================================================================
+
+Original readme.txt included below:
+
+=============
+Release 1.10:
+=============
+New features:
+- New Windows makefile project. Can be built using the standard make from the command line.
+- Added the paths and comments for user-built DSP/Link libraries in the makefiles.
+- Fully tested with OMAPL137 SDK release 1.00.00.10
+
+Issues fixed:
+- All Makefiles now point to the default installation directories as defined in the OMAPL1 Getting Started Guide.
+
+- The element arg1 in the message data structure was mistakenly defined as array of pointers to Char. Although not critical, it could cause unpredictable results if the code was modified. The following locations in the code were changed:
+In <helloDSP.c> line 66:
+Changed from
+Char8* arg1[ARG_SIZE];
+to
+Char8 arg1[ARG_SIZE];
+
+In <helloDSP_config.h>:
+Line 54 changed from:
+Char* arg1[ARG_SIZE];
+to
+Char arg1[ARG_SIZE];
+
+Line 166 changed from:
+SYS_sprintf((Char*)msg->arg1, "DSP is awake!");
+to
+SYS_sprintf(msg->arg1, "DSP is awake!");
+
+Line 216 changed from:
+SYS_sprintf((Char*)msg->arg1, "Iteration %d is complete.", i);
+to
+SYS_sprintf(msg->arg1, "Iteration %d is complete.", i);
+
+- Both makefiles failed to build the project partially. The following locations in the files were changed:
+DSP <Makefile>:
+Line 204 changed from:
+@$(BASE_COMPILER)\bin\$(CC) $(ALL_LDFLAGS) $(LDINCLUDES_D) -o$@ $? $(LIBS_D) -m$(MAPFILE_D) $(CMDS)
+to
+@$(BASE_COMPILER)\bin\$(CC) $(ALL_LDFLAGS) $(LDINCLUDES_D) -o$@ $(OBJS_D) $(LIBS_D) -m$(MAPFILE_D) $(CMDS)
+
+Line 220 changed from:
+@$(BASE_COMPILER)\bin\$(CC) $(ALL_LDFLAGS) $(LDINCLUDES_R) -o$@ $? $(LIBS_R) -m$(MAPFILE_R) $(CMDS)
+to 
+@$(BASE_COMPILER)\bin\$(CC) $(ALL_LDFLAGS) $(LDINCLUDES_R) -o$@ $(OBJS_R) $(LIBS_R) -m$(MAPFILE_R) $(CMDS)
+
+=============
+Release 1.00:
+=============
+Initial release
+
