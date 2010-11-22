@@ -11,13 +11,15 @@ SRC_URI[hellogppgz.sha256sum] = "c48e4d8634ae5689e976625c30dc6af2b53ccb65391f072
 SRC_URI[hellodspgz.md5sum] = "3ed3454a7446471cdb66be044f4e4fea"
 SRC_URI[hellodspgz.sha256sum] = "0cc97bcd3564d54e99b4bd9ddbf9afb004ff1c673853731815416da619596d9b"
 
-PR = "r1"
+PR = "r2"
+
+PROVIDES += "ti-hellodsp-example"
 
 require ti-hellodsp.inc
 require ti-paths.inc
-require ../sd/sd-evmomapl137-bsl.inc
-#require ti-staging.inc
+require ti-staging.inc
 #require ti-eula-unpack.inc
+require ../sd/sd-evmomapl137-bsl.inc
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
@@ -28,7 +30,7 @@ S = "${WORKDIR}"
 SRC_URI = " \
 https://www-a.ti.com/downloads/sds_support/applications_packages/helloDSP/1_10/Linux/helloDSPgpp_1_10.tgz;name=hellogppgz \
 https://www-a.ti.com/downloads/sds_support/applications_packages/helloDSP/1_10/Linux/helloDSPdsp_1_10.tgz;name=hellodspgz \
-file://hellodsp/0001-helloDSP-Makefiles.patch \
+file://ti-hellodsp/0001-helloDSP-Makefiles.patch \
 "
 
 DEPENDS = "sd-evmomapl137-bsl"
@@ -77,18 +79,22 @@ do_install() {
     install -d ${D}${HELLODSP_INSTALL_DIR_RECIPE}
 
     install -d ${D}${HELLODSP_INSTALL_DIR_RECIPE}/Debug
-    cp -pPf ${S}/helloDSPdsp/Debug/helloDSP.out \
+    install -m 0755 ${S}/helloDSPdsp/Debug/helloDSP.out \
             ${D}${HELLODSP_INSTALL_DIR_RECIPE}/Debug/
-    cp -pPf ${S}/helloDSPgpp/Debug/helloDSPgpp \
+    install -m 0755  ${S}/helloDSPgpp/Debug/helloDSPgpp \
             ${D}${HELLODSP_INSTALL_DIR_RECIPE}/Debug/
 
     install -d ${D}${HELLODSP_INSTALL_DIR_RECIPE}/Release
-    cp -pPf ${S}/helloDSPdsp/Release/helloDSP.out \
+    install -m 0755 ${S}/helloDSPdsp/Release/helloDSP.out \
             ${D}${HELLODSP_INSTALL_DIR_RECIPE}/Release/
-    cp -pPf ${S}/helloDSPgpp/Release/helloDSPgpp \
+    install -m 0755 ${S}/helloDSPgpp/Release/helloDSPgpp \
             ${D}${HELLODSP_INSTALL_DIR_RECIPE}/Release/
 }
 
 
-FILES_${PN} += "${installdir}/ti-hellodsp-example/*"
-INSANE_SKIP_${PN} = "True"
+PACKAGES += "ti-hellodsp-example"
+FILES_ti-hellodsp-example += "${installdir}/ti-hellodsp-example/Debug/*"
+FILES_ti-hellodsp-example += "${installdir}/ti-hellodsp-example/Release/*"
+INSANE_SKIP_ti-hellodsp-example = "True"
+
+RDEPENDS += "ti-dsplink-module"

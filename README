@@ -5,8 +5,10 @@ http://processors.wiki.ti.com/index.php/Example_application_using_DSP_Link_on_OM
 Also includes an arago recipe for Spectrum Digital BSL:
 http://support.spectrumdigital.com/boards/evmomapl137/revd/
 
-Note: No need for modules_1_10.tgz, since dsplinkk.ko is loaded
-      by ti-dsplink recipe
+NOTE: You will need symlinks to or local copies of:
+    recipes/ti/ti-paths.inc
+    recipes/ti/ti-staging.inc
+    recipes/images/arago-image.inc
 
 TODO: Add support for da850-ompal137-evm
 TODO: Add call_dsplib example:
